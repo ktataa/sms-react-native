@@ -32,11 +32,8 @@ export default function QRScanner({publicKey}:Props) {
   
   
     const onRead = async (_e: any) => {
-      console.log(_e.data);
       setURL(_e?.data)
-    //   setScanCode(false)
-    setQRscanned(true)
-    //   setSendAfterScan(true)
+      setQRscanned(true)
   
     };
 
@@ -78,16 +75,3 @@ export default function QRScanner({publicKey}:Props) {
 
     );
 }
-// const styles = StyleSheet.create({
-
-
-//     input: {
-//         height: 40,
-//         margin: 12,
-//         borderWidth: 2,
-//         color: "#007AFF",
-
-//         width: '100%',
-//         borderColor: "white"
-//     },
-// })

@@ -95,7 +95,7 @@ export default function Home(props: Props) {
           ) : (
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
 
-              <Text style={{ color: "#FFFFFF" }} >Sending..</Text>
+              <Text style={{ color: "#000000" }} >Sending..</Text>
             </View>
 
 

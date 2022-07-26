@@ -31,11 +31,6 @@ export default function SendSol({ publicKey, to_amount, to_address }: Props) {
 
   const { connection } = useConnection();
   const { authorizeSession } = useAuthorization()
-  console.log(to_amount);
-  console.log(to_address);
-
-
-
 
 
 
