@@ -126,7 +126,6 @@ export default function SendAfterScan({ publicKey, url }: Props) {
             /> */}
   <TextInput
                 style={styles.input}
-                disabled
           
                 placeholder="To address"
                 keyboardType="default"

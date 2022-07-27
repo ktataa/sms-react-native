@@ -13,6 +13,7 @@ import { useGlobalState } from './state';
 import Receive from './components/Receive';
 import SendModal from './components/SendModal';
 import QRScanner from './components/QRScanner';
+import DisconnectButton from './components/DisconnectButton';
 
 
 
@@ -114,6 +115,8 @@ export default function Home(props: Props) {
             <AccountInfo publicKey={publicKey} />
 
             <RequestAirdropBtn publicKey={publicKey} />
+            <DisconnectButton>Disconnect</DisconnectButton>
+       
 
 
           </>
