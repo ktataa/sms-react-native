@@ -115,15 +115,7 @@ export default function SendAfterScan({ publicKey, url }: Props) {
                 placeholderTextColor="white"
 
             >To: {recipient.toBase58().substring(0, 27)}...</TextInput>
-            {/* <TextInput
-                style={styles.input}
-                onChangeText={onChangeAmount}
-                value={to_amount}
-                placeholder="Amount"
-                keyboardType="numeric"
-                placeholderTextColor="white"
-
-            /> */}
+       
   <TextInput
                 style={styles.input}
           

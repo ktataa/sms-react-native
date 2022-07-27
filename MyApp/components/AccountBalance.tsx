@@ -27,9 +27,9 @@ export default function AccountBalance({ publicKey }: Props) {
     let myBalance = await connection.getBalance(publicKey);
     return new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 }).format(
       (myBalance || 0) / LAMPORTS_PER_SOL) as any
-  }, [value])
+  }, [value,publicKey])
 
-  return (
+  return (  
     <View style={styles.container}>
       <Subheading>Balance: </Subheading>
       <Text style={styles.currencySymbol} variant="titleLarge">
