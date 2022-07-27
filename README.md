@@ -2,18 +2,16 @@
 
 A simple react-native application built on top of Solana Mobile Stack 
 
-## Project Status
-(only necessary if incomplete)
 
 #### Features:
 
-Request airdrop.
+-Request airdrop.
 
-Send and receive SOL using Address/QRcode (Solana pay).
+-Send and receive SOL using Address/QRcode (Solana pay).
 
-Tap to pay.
+-Tap to pay.
 
-Send and receive SPL-tokens and NFTs.
+-Send and receive SPL-tokens and NFTs.
 
 
 
@@ -28,7 +26,7 @@ Send and receive SPL-tokens and NFTs.
 
 Clone down this repository. You will need `node` and `npm` installed globally on your machine.  
 
-Make sure you have the fakewallet [a link](https://github.com/solana-mobile/mobile-wallet-adapter)  installed on your device.
+Make sure you have the [fakewallet](https://github.com/solana-mobile/mobile-wallet-adapter)  installed on your device.
 
 Installation:
 
