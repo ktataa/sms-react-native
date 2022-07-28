@@ -1,16 +1,19 @@
 
 
-import { PublicKey } from '@solana/web3.js';
-import React, { useMemo, useState } from 'react';
+import { PublicKey, Keypair } from '@solana/web3.js';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import BigNumber from 'bignumber.js';
 import QRCode from 'react-native-qrcode-svg';
 
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 
 import { useGlobalState } from '../state';
-import { encodeURL } from '@solana/pay';
-import { TextInput } from 'react-native-paper';
+import { encodeURL, findReference } from '@solana/pay';
+import { Text, TextInput } from 'react-native-paper';
+import { useConnection } from '@solana/wallet-adapter-react';
 
 
 let logoFromFile = require('../assets/solanaLogoMark.png');
@@ -23,13 +26,53 @@ export default function Receive({ publicKey }: Props) {
 
 
   const [receiveModalEnabled, changeReceiveModalStatus] = useGlobalState('receiveModal');
-  const [request_amount,onChangeAmount] =  useState('')
+  const [value, update] = useGlobalState('requestCount');
+
+  const [request_amount, onChangeAmount] = useState('')
+  const [txFound, setTxFound] = useState(false)
+  const [spinnerVisible, changeSpinnerStatus] = useState(false)
+
+  const { connection } = useConnection()
+  const originalReference = useMemo(() => {
+    return Keypair.generate().publicKey
+
+  }, [publicKey, request_amount])
+
+
 
   const encodedURL = useMemo(() => {
-    return encodeURL({ recipient: new PublicKey(publicKey), amount: new BigNumber(Number(request_amount)?Number(request_amount):0), label: "Hi", message: "hi", memo: "OrderId5678" });
+    return encodeURL({ recipient: new PublicKey(publicKey), amount: new BigNumber(Number(request_amount) ? Number(request_amount) : 0), reference: originalReference, label: "Hi", message: "hi", memo: "OrderId5678" });
 
 
-  }, [publicKey,request_amount])
+  }, [publicKey, request_amount, originalReference])
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      console.log(txFound);
+
+      const signatureInfo = await findReference(connection, originalReference);
+      console.log(signatureInfo.signature);
+
+      setTxFound(true)
+      changeSpinnerStatus(true)
+      clearInterval(interval);
+      await connection.confirmTransaction(signatureInfo.signature, 'finalized')
+      changeSpinnerStatus(false)
+
+      changeReceiveModalStatus(false)
+      update(prestatus => prestatus + 1)
+
+
+
+    }, 5000);
+    return () => clearInterval(interval);
+
+
+
+
+
+
+  }, [encodedURL])
+
 
 
 
@@ -39,7 +82,11 @@ export default function Receive({ publicKey }: Props) {
   return (
     <>
       <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', margin: 10 }}>
-
+        <Spinner
+          visible={spinnerVisible}
+          textContent={'Receiving...'}
+          textStyle={styles.spinnerTextStyle}
+        />
 
         <QRCode
           value={encodedURL.toString()}
@@ -50,18 +97,23 @@ export default function Receive({ publicKey }: Props) {
           logo={logoFromFile}
           logoBackgroundColor={logoFromFile}
         />
-         <TextInput
-                style={styles.input}
-                onChangeText={onChangeAmount}
-                value={request_amount}
-                placeholder="Amount"
-                keyboardType="numeric"
-                placeholderTextColor="white"
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeAmount}
+          value={request_amount}
+          placeholder="Amount"
+          keyboardType="numeric"
+          placeholderTextColor="white"
 
-            />
+        />
+
+        <Text style={{ fontWeight: 'bold', color: "black" }} >{txFound ? "found" : "not found"} </Text>
+
+
 
 
         <Button onPress={() => changeReceiveModalStatus(false)} title="Cancel" />
+
       </View>
 
     </>
@@ -69,17 +121,19 @@ export default function Receive({ publicKey }: Props) {
 
 
   );
-} 
+}
 const styles = StyleSheet.create({
 
-
+  spinnerTextStyle: {
+    color: '#FFF'
+  },
   input: {
-      height: 40,
-      margin: 12,
-      borderWidth: 2,
-      color: "#007AFF",
+    height: 40,
+    margin: 12,
+    borderWidth: 2,
+    color: "#007AFF",
 
-      width: '100%',
-      borderColor: "white"
+    width: '100%',
+    borderColor: "white"
   },
 })
