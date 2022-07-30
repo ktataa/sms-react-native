@@ -10,12 +10,11 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 import {
 
-  SystemProgram,
   Transaction,
 
 } from '@solana/web3.js';
 import ModalDropdown from 'react-native-modal-dropdown';
-import { createAssociatedTokenAccountInstruction, createTransferCheckedInstruction, getAccount, getAssociatedTokenAddress, getMint } from '@solana/spl-token';
+import { createAssociatedTokenAccountInstruction, getAccount, getAssociatedTokenAddress } from '@solana/spl-token';
 import { transact } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
 import { useGlobalState } from '../state';
 import { encodeURL, findReference } from '@solana/pay';
@@ -34,7 +33,7 @@ type Props = Readonly<{
 }>;
 export default function Receive({ publicKey }: Props) {
 
-  const {authorizeSession}= useAuthorization()
+  const { authorizeSession } = useAuthorization()
 
 
   const [receiveModalEnabled, changeReceiveModalStatus] = useGlobalState('receiveModal');
@@ -46,58 +45,55 @@ export default function Receive({ publicKey }: Props) {
   const [spinnerVisible, changeSpinnerStatus] = useState(false)
 
   const { connection } = useConnection()
-  const { tokenAccounts } = useGetTokenAccounts(publicKey,connection);
-  const [selectedTokenState,setSelectedToken] = useState("Solana")
+  const { tokenAccounts } = useGetTokenAccounts(publicKey, connection);
+  const [selectedTokenState, setSelectedToken] = useState("Solana")
 
 
-  // const originalReference = useMemo(() => {
-
-  // }, [])
   var originalReference;
 
 
 
   const encodedURL = useMemo(() => {
-    originalReference= Keypair.generate().publicKey
+    originalReference = Keypair.generate().publicKey
 
     try {
-      return encodeURL({ recipient: new PublicKey(publicKey), amount: new BigNumber(Number(request_amount) ? Number(request_amount) : 0),splToken: selectedTokenState == "Solana"? undefined: new PublicKey(selectedTokenState), reference: originalReference, label: "Hi", message: "hi", memo: "OrderId5678" });
+      return encodeURL({ recipient: new PublicKey(publicKey), amount: new BigNumber(Number(request_amount) ? Number(request_amount) : 0), splToken: selectedTokenState == "Solana" ? undefined : new PublicKey(selectedTokenState), reference: originalReference, label: "Hi", message: "hi", memo: "OrderId5678" });
 
     } catch (error) {
-      return encodeURL({ recipient: new PublicKey(publicKey), amount: new BigNumber(Number(request_amount) ? Number(request_amount) : 0),splToken: undefined, reference: originalReference, label: "Hi", message: "hi", memo: "OrderId5678" });
+      return encodeURL({ recipient: new PublicKey(publicKey), amount: new BigNumber(Number(request_amount) ? Number(request_amount) : 0), splToken: undefined, reference: originalReference, label: "Hi", message: "hi", memo: "OrderId5678" });
 
-      
+
     }
 
 
-  }, [publicKey, request_amount,selectedTokenState])
+  }, [publicKey, request_amount, selectedTokenState])
 
 
-  const ATAinitialized = suspend( async()=>{
+  const ATAinitialized = suspend(async () => {
 
-    if(selectedTokenState == "Solana") return true;
+    if (selectedTokenState == "Solana") return true;
     console.log(new PublicKey(selectedTokenState));
-    
+
     try {
       const recipientATA = await getAssociatedTokenAddress(new PublicKey(selectedTokenState), publicKey);
       const recipientAccount = await getAccount(connection, recipientATA);
       if (!recipientAccount.isInitialized) return false
       return true
-  
-      
+
+
     } catch (error) {
       console.log(error);
-      
+
       return false
-      
+
     }
 
-    
- 
 
-    
 
-  },[selectedTokenState])
+
+
+
+  }, [selectedTokenState])
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -126,21 +122,21 @@ export default function Receive({ publicKey }: Props) {
 
 
   }, [encodedURL])
-  var tokens_list = suspend(async()=>{
+  var tokens_list = suspend(async () => {
     return await tokenAccounts()
 
-  },[connection,publicKey])
+  }, [connection, publicKey])
 
-  const selectedToken = (_token)=>{
+  const selectedToken = (_token) => {
 
     let tokenMint = tokens_list[_token].mint
-    
 
-    tokenMint == undefined ? setSelectedToken("Solana"): setSelectedToken(tokenMint.toString())    
+
+    tokenMint == undefined ? setSelectedToken("Solana") : setSelectedToken(tokenMint.toString())
 
   }
 
-  const initAssociatedTokenAccount = async()=>{
+  const initAssociatedTokenAccount = async () => {
     let ata = await getAssociatedTokenAddress(
       new PublicKey(selectedTokenState), // mint
       publicKey, // owner
@@ -200,7 +196,7 @@ export default function Receive({ publicKey }: Props) {
 
         {/* <Text></Text> */}
         <Text> Select Token </Text>
-        <ModalDropdown onSelect={selectedToken} options={tokens_list.map((e)=> e.mint != undefined ? e.mint : "Solana")}/>
+        <ModalDropdown onSelect={selectedToken} options={tokens_list.map((e) => e.mint != undefined ? e.mint : "Solana")} />
         <Text> Or input token address </Text>
 
         <TextInput
@@ -212,13 +208,13 @@ export default function Receive({ publicKey }: Props) {
 
         />
 
-       
+
         {
-          !ATAinitialized ?(
+          !ATAinitialized ? (
             <Button onPress={() => initAssociatedTokenAccount()} title="Init Token Account" />
 
-            
-          ):(<></>)
+
+          ) : (<></>)
         }
 
         <TextInput
@@ -231,7 +227,7 @@ export default function Receive({ publicKey }: Props) {
 
         />
 
-      
+
 
         <Text style={{ fontWeight: 'bold', color: "black" }} >{txFound ? "found" : "not found"} </Text>
 

@@ -3,7 +3,6 @@
 import { PublicKey } from '@solana/web3.js';
 import React, { useMemo } from 'react';
 import { Button, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text } from 'react-native-paper';
 
 import { TextInput } from 'react-native-paper';
 
@@ -107,23 +106,23 @@ export default function SendAfterScan({ publicKey, url }: Props) {
   return (
     <>
       <TextInput
-                style={styles.input}
-                disabled
-          
-                placeholder="To address"
-                keyboardType="default"
-                placeholderTextColor="white"
+        style={styles.input}
+        disabled
 
-            >To: {recipient.toBase58().substring(0, 27)}...</TextInput>
-       
-  <TextInput
-                style={styles.input}
-          
-                placeholder="To address"
-                keyboardType="default"
-                placeholderTextColor="white"
+        placeholder="To address"
+        keyboardType="default"
+        placeholderTextColor="white"
 
-            >Amount: {amount?.toString()}</TextInput>
+      >To: {recipient.toBase58().substring(0, 27)}...</TextInput>
+
+      <TextInput
+        style={styles.input}
+
+        placeholder="To address"
+        keyboardType="default"
+        placeholderTextColor="white"
+
+      >Amount: {amount?.toString()}</TextInput>
 
       <TouchableOpacity style={{ margin: 5 }}>
 
@@ -141,17 +140,17 @@ export default function SendAfterScan({ publicKey, url }: Props) {
     </>
 
   );
-} 
+}
 const styles = StyleSheet.create({
 
 
   input: {
-      height: 40,
-      margin: 12,
-      borderWidth: 2,
-      color: "#007AFF",
+    height: 40,
+    margin: 12,
+    borderWidth: 2,
+    color: "#007AFF",
 
-      width: '100%',
-      borderColor: "white"
+    width: '100%',
+    borderColor: "white"
   },
 })

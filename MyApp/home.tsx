@@ -1,20 +1,8 @@
-import React, { ComponentProps, Suspense } from 'react';
-
-
-import { ActivityIndicator, Button, Text, View } from 'react-native';
+import React, { ComponentProps } from 'react';
+import { Button, View } from 'react-native';
 import ConnectButton from './components/ConnectButton';
-import AccountInfo from './components/AccountInfo';
-import RequestAirdropBtn from './components/RequestAirdropBtn';
-
-import Modal from 'react-native-modal';
 import useAuthorization from './utils/useAuthorization';
-
-import { useGlobalState } from './state';
-import Receive from './components/Receive';
-import SendModal from './components/SendModal';
-import QRScanner from './components/QRScanner';
-import DisconnectButton from './components/DisconnectButton';
-import AccountTokens from './components/AccountTokens';
+import MainScreen from './screens/MainScreen';
 
 
 
@@ -23,24 +11,11 @@ import AccountTokens from './components/AccountTokens';
 
 
 
-
-type Props = Readonly<ComponentProps<typeof Button>>;
-
-export default function Home(props: Props) {
-
-
-  const [sendModalEnabled, changeSendModalStatus] = useGlobalState('sendModal');
-  const [receiveModalEnabled, changeReceiveModalStatus] = useGlobalState('receiveModal');
-
-  const [loaderVisible, setVisibility] = useGlobalState('loaderVisible');
-  const [sendAfterScanStatus, setSendAfterScan] = useGlobalState('sendAfterScan');
+export default function Home() {
 
 
 
-  const [scanCode, setScanCode] = useGlobalState('scanCode')
-
-
-  const { publicKey } = useAuthorization();
+  const { selectedAccount,onChangeAccount,accounts } = useAuthorization();
 
 
 
@@ -51,85 +26,13 @@ export default function Home(props: Props) {
 
     <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
 
-      <Modal backdropColor='white' isVisible={sendModalEnabled || receiveModalEnabled} animationIn="slideInUp">
-        {
-
-
-          !loaderVisible ? (
-
-            (sendModalEnabled && !scanCode && !sendAfterScanStatus && publicKey) ? (
-
-              <SendModal publicKey={publicKey} />
-
-
-
-
-            ) : (receiveModalEnabled && publicKey) ? (
-
-
-
-
-              <Receive publicKey={publicKey} />
-
-
-
-            ) : (sendModalEnabled && scanCode) ? (
-
-              <>
-                {
-                  publicKey ? (
-                    <QRScanner publicKey={publicKey} />
-
-
-                  ) : (
-                    <></>
-                  )
-                }
-
-
-
-
-              </>
-            ) :
-              (<></>)
-
-
-          ) : (
-            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-
-              <Text style={{ color: "#000000" }} >Sending..</Text>
-            </View>
-
-
-
-
-          )
-
-        }
-
-      </Modal>
-
-
       {
-        publicKey ? (
-          <>
-            <AccountInfo publicKey={publicKey} />
+        (selectedAccount && accounts)?(
+          <MainScreen selectedAccount={selectedAccount} onChange={onChangeAccount} accounts={accounts} ></MainScreen>
 
-          
-
-            <RequestAirdropBtn publicKey={publicKey} />
-            <DisconnectButton>Disconnect</DisconnectButton>
-            <Suspense fallback={<ActivityIndicator />}>
-          <AccountTokens publicKey={publicKey} />
-        </Suspense>
-
-
-          </>
-
-        ) : (<ConnectButton mode="contained">Connect</ConnectButton>
-        )
+        ):
+        <ConnectButton mode="contained">Connect</ConnectButton>
       }
-
 
     </View>
 

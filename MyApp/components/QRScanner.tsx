@@ -2,13 +2,9 @@
 
 import { PublicKey } from '@solana/web3.js';
 import React, { useState } from 'react';
-import { Button, View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 
 
-import { useGlobalState } from '../state';
-
-import { TextInput } from 'react-native-paper';
-import SendSol from './SendSOL';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import SendAfterScan from './SendAfterScan';
@@ -18,23 +14,22 @@ type Props = Readonly<{
 }>;
 
 
-export default function QRScanner({publicKey}:Props) {
-    const [value, update] = useGlobalState('requestCount');
+export default function QRScanner({ publicKey }: Props) {
 
-    const [QRscanned,setQRscanned] = useState(false)
+    const [QRscanned, setQRscanned] = useState(false)
     const [url, setURL] = useState('');
 
 
 
 
-  
-  
-  
-  
+
+
+
+
     const onRead = async (_e: any) => {
-      setURL(_e?.data)
-      setQRscanned(true)
-  
+        setURL(_e?.data)
+        setQRscanned(true)
+
     };
 
 
@@ -47,25 +42,25 @@ export default function QRScanner({publicKey}:Props) {
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
 
             {
-                !QRscanned?(
-                    <QRCodeScanner 
-                    onRead={onRead}
-                    flashMode={RNCamera.Constants.FlashMode.torch}
-    
-                />
+                !QRscanned ? (
+                    <QRCodeScanner
+                        onRead={onRead}
+                        flashMode={RNCamera.Constants.FlashMode.torch}
 
-                ):(
+                    />
+
+                ) : (
                     <View style={{ backgroundColor: "#FFFFFF" }} >
 
-                    <SendAfterScan publicKey={publicKey} url={url} />
-                 </View>
-                     
+                        <SendAfterScan publicKey={publicKey} url={url} />
+                    </View>
+
 
                 )
             }
 
-        
-  
+
+
 
         </View>
 

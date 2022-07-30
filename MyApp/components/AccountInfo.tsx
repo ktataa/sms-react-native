@@ -2,8 +2,8 @@
 
 import { PublicKey } from '@solana/web3.js';
 import React, { Suspense, useMemo } from 'react';
-import { ActivityIndicator, Linking, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
-import { Card, Headline, Surface, Button, IconButton } from 'react-native-paper';
+import { ActivityIndicator, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Card, Surface } from 'react-native-paper';
 import { useGlobalState } from '../state';
 import AccountBalance from './AccountBalance';
 import Icon from 'react-native-vector-icons/FontAwesome';
