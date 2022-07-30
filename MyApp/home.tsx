@@ -1,7 +1,7 @@
-import React, { ComponentProps } from 'react';
+import React, { ComponentProps, Suspense } from 'react';
 
 
-import { Button, Text, View } from 'react-native';
+import { ActivityIndicator, Button, Text, View } from 'react-native';
 import ConnectButton from './components/ConnectButton';
 import AccountInfo from './components/AccountInfo';
 import RequestAirdropBtn from './components/RequestAirdropBtn';
@@ -14,6 +14,7 @@ import Receive from './components/Receive';
 import SendModal from './components/SendModal';
 import QRScanner from './components/QRScanner';
 import DisconnectButton from './components/DisconnectButton';
+import AccountTokens from './components/AccountTokens';
 
 
 
@@ -114,9 +115,13 @@ export default function Home(props: Props) {
           <>
             <AccountInfo publicKey={publicKey} />
 
+          
+
             <RequestAirdropBtn publicKey={publicKey} />
             <DisconnectButton>Disconnect</DisconnectButton>
-       
+            <Suspense fallback={<ActivityIndicator />}>
+          <AccountTokens publicKey={publicKey} />
+        </Suspense>
 
 
           </>

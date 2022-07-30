@@ -1,8 +1,9 @@
 import { useConnection } from '@solana/wallet-adapter-react';
 import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { Subheading, Text } from 'react-native-paper';
+import useGetTokenAccounts  from "../utils/useGetTokenAccounts";
 
 import { suspend } from 'suspend-react'
 
@@ -17,8 +18,17 @@ import { useGlobalState } from '../state';
 
 export default function AccountBalance({ publicKey }: Props) {
   const { connection } = useConnection();
+  const { tokenAccounts } = useGetTokenAccounts(publicKey,connection);
+  
   const [balance, setBalance] = useState(0);
   const [value, update] = useGlobalState('requestCount');
+
+  var accounts = suspend(async()=>{
+    return await tokenAccounts()
+
+  },[connection,publicKey])
+  console.log(accounts);
+  
 
 
 
@@ -36,6 +46,7 @@ export default function AccountBalance({ publicKey }: Props) {
         {'\u25ce'}
       </Text>
       <Subheading>{lamports}</Subheading>
+     
 
 
 
@@ -51,5 +62,10 @@ const styles = StyleSheet.create({
   },
   currencySymbol: {
     marginRight: 4,
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
   },
 });

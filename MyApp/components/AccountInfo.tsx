@@ -65,7 +65,6 @@ export default function AccountInfo({ publicKey }: Props) {
           </Card.Actions>
         </View>
       </Card.Content>
-      {/* </Card> */}
     </Surface>
   );
 }
