@@ -123,7 +123,7 @@ export default function SendAfterScan({ publicKey, url }: Props) {
                 keyboardType="default"
                 placeholderTextColor="white"
 
-            >Amount: {amount?.toString()} SOL</TextInput>
+            >Amount: {amount?.toString()}</TextInput>
 
       <TouchableOpacity style={{ margin: 5 }}>
 
