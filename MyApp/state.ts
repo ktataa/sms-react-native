@@ -9,5 +9,6 @@ export const { useGlobalState } = createGlobalState({
   receiveModal:false,
   scanCode:false,
   sendAfterScan:false,
+  showAccountActions:false,
   ScanURL:""
 });

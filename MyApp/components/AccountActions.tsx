@@ -15,6 +15,7 @@ import QRScanner from './QRScanner';
 import DisconnectButton from './DisconnectButton';
 import AccountTokens from './AccountTokens';
 import { PublicKey } from '@solana/web3.js';
+import { Button } from 'react-native-paper';
 
 
 
@@ -36,6 +37,7 @@ export default function AccountActions({ publicKey }: Props) {
 
     const [loaderVisible, setVisibility] = useGlobalState('loaderVisible');
     const [sendAfterScanStatus, setSendAfterScan] = useGlobalState('sendAfterScan');
+    const [showAccountActions, setShowAccountActions ] = useGlobalState("showAccountActions")
 
 
 
@@ -117,9 +119,16 @@ export default function AccountActions({ publicKey }: Props) {
                     <>
                         <AccountInfo publicKey={publicKey} />
 
-
-
+                        <View style={{flexDirection:"row"}} >
+                        <Button onPress={()=>  setShowAccountActions(false) } > Return </Button>
                         <RequestAirdropBtn publicKey={publicKey} />
+
+
+
+                        </View>
+
+
+
                         <DisconnectButton>Disconnect</DisconnectButton>
                         <Suspense fallback={<ActivityIndicator />}>
                             <AccountTokens publicKey={publicKey} />
