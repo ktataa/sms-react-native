@@ -1,6 +1,6 @@
 
 
-import { PublicKey } from '@solana/web3.js';
+import { PublicKey,Transaction } from '@solana/web3.js';
 import React, { useMemo } from 'react';
 import { Button, StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -12,9 +12,10 @@ import { useConnection } from '@solana/wallet-adapter-react';
 import { transact } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
 
 import { useGlobalState } from '../state';
-import { createTransfer, parseURL, TransferRequestURL } from '@solana/pay';
+import { createTransfer, parseURL, TransferRequestURL } from '@solana/pay/src';
 import useAuthorization from '../utils/useAuthorization';
 import useGuardedCallback from '../utils/useGuardedCallback';
+import { createAssociatedTokenAccountInstruction } from '@solana/spl-token';
 
 
 type Props = Readonly<{
@@ -40,7 +41,7 @@ export default function SendAfterScan({ publicKey, url }: Props) {
   }, [url])
 
 
-  const send = useGuardedCallback(async () => {
+  const send = async () => {
     if (publicKey) {
 
       const transaction = await createTransfer(connection, publicKey, {
@@ -50,6 +51,8 @@ export default function SendAfterScan({ publicKey, url }: Props) {
         reference,
         memo,
       });
+      console.log(transaction);
+      
 
 
 
@@ -66,7 +69,6 @@ export default function SendAfterScan({ publicKey, url }: Props) {
           transactions: [transaction],
         });
       });
-
 
 
 
@@ -97,8 +99,10 @@ export default function SendAfterScan({ publicKey, url }: Props) {
 
 
 
-  }, []
-  )
+  }
+  
+  // , []
+  // )
 
 
 

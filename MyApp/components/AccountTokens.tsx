@@ -5,6 +5,8 @@ import { View } from 'react-native';
 import { List } from 'react-native-paper';
 import useGetTokenAccounts from "../utils/useGetTokenAccounts";
 import { suspend } from 'suspend-react'
+import { useGlobalState } from '../state';
+// useGlobalState
 
 
 
@@ -17,12 +19,13 @@ type Props = {
 export default function AccountTokens({ publicKey }: Props) {
   const { connection } = useConnection();
   const { tokenAccounts } = useGetTokenAccounts(publicKey, connection);
+  const [value, update] = useGlobalState('requestCount');
 
 
   var tokens_list = suspend(async () => {
     return await tokenAccounts()
 
-  }, [connection, publicKey])
+  }, [connection, publicKey,value])
 
 
 

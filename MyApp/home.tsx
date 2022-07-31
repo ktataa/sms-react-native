@@ -6,6 +6,8 @@ import MainScreen from './screens/MainScreen';
 
 
 
+import NfcManager, {NfcTech} from 'react-native-nfc-manager';
+NfcManager.start();
 
 
 

@@ -16,7 +16,6 @@ type Props = Readonly<{
 
 }>;
 export default function SendModal({ publicKey }: Props) {
-    const [value, update] = useGlobalState('requestCount');
     const [sendModalEnabled, changeSendModalStatus] = useGlobalState('sendModal');
 
 

@@ -2,7 +2,7 @@
 
 import { PublicKey } from '@solana/web3.js';
 import React, { Suspense, useMemo } from 'react';
-import { ActivityIndicator, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, TouchableOpacity,Clipboard } from 'react-native';
 import { Card, Surface } from 'react-native-paper';
 import { useGlobalState } from '../state';
 import AccountBalance from './AccountBalance';
@@ -26,7 +26,12 @@ export default function AccountInfo({ publicKey }: Props) {
 
   return (
     <Surface elevation={4} style={styles.container}>
+<TouchableOpacity  onPress={()=> Clipboard.setString(publicKeyBase58String) } >
+
+      
       <Card.Title title={publicKeyBase58String} />
+      </TouchableOpacity>
+
       <Card.Content>
 
 

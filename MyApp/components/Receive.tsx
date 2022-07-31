@@ -55,7 +55,7 @@ export default function Receive({ publicKey }: Props) {
 
   const encodedURL = useMemo(() => {
     originalReference = Keypair.generate().publicKey
-
+   
     try {
       return encodeURL({ recipient: new PublicKey(publicKey), amount: new BigNumber(Number(request_amount) ? Number(request_amount) : 0), splToken: selectedTokenState == "Solana" ? undefined : new PublicKey(selectedTokenState), reference: originalReference, label: "Hi", message: "hi", memo: "OrderId5678" });
 
@@ -72,7 +72,6 @@ export default function Receive({ publicKey }: Props) {
   const ATAinitialized = suspend(async () => {
 
     if (selectedTokenState == "Solana") return true;
-    console.log(new PublicKey(selectedTokenState));
 
     try {
       const recipientATA = await getAssociatedTokenAddress(new PublicKey(selectedTokenState), publicKey);
@@ -125,7 +124,7 @@ export default function Receive({ publicKey }: Props) {
   var tokens_list = suspend(async () => {
     return await tokenAccounts()
 
-  }, [connection, publicKey])
+  }, [connection, publicKey,value])
 
   const selectedToken = (_token) => {
 
