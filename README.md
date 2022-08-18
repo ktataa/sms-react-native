@@ -11,7 +11,7 @@ A simple react-native application built on top of Solana Mobile Stack
 
 -Tap to pay (On progress).
 
--Send and receive SPL-tokens and NFTs (On progress).
+-Send and receive SPL-tokens and NFTs.
 
 
 
